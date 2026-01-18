@@ -23,6 +23,7 @@ type ChatResponse = {
 //
 // If the underlying LLM provider changes, consumers of this service
 // may also need changes, which is why this abstraction is considered "leaky".
+// Below is our application logic.
 export const chatService = {
    async sendMessage(
       prompt: string,
