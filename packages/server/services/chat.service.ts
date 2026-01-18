@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { conversationRepository } from '../repositories/conversation.respository';
 
-// Implementation Detail
+// - Implementation Detail
 const client = new OpenAI({
    apiKey: process.env.OPENAI_API_KEY,
 });
@@ -11,13 +11,18 @@ type ChatResponse = {
    message: string;
 };
 
-// Public Interface
-// "Leaky Abstraction" -> (This is abstraction over OpenAI because it hides the complexity,
-// it hides the details, the consumers of this module,
-// like our index module, don't know what LLM we are using under the hood, so the chatService is an abstraction over OpenAI,
-// but it's a Leaky Abstraction because some of the details are being exposed to the outside, to the consumers).
-// Below we are returning the response object which is specific to the OpenAI platform,
-// that's why we say this service is a "Leaky Abstraction".
+// NOTE: Public Interface & Leaky Abstraction
+//
+// This service acts as a public interface for sending chat messages.
+// It hides the complexity of interacting with OpenAI (model choice,
+// request structure, and conversation handling).
+//
+// However, it is a leaky abstraction because it still exposes
+// OpenAI-specific concepts (such as response IDs and message format)
+// to its consumers.
+//
+// If the underlying LLM provider changes, consumers of this service
+// may also need changes, which is why this abstraction is considered "leaky".
 export const chatService = {
    async sendMessage(
       prompt: string,
