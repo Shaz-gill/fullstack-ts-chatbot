@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useRef, type KeyboardEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowUp } from 'react-icons/fa';
 import { Button } from './ui/button';
@@ -7,14 +9,23 @@ type FormData = {
 };
 
 export const ChatBot = () => {
+   // We used 'ref hook' because 'conversationId' should be created once and should not change and re-render, that is the difference between the ref and state hooks.
+   // With 'ref hook', we can store values that should not cause a re-render. It's good for timers, IDs.
+   const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
 
-   const onSubmit = (data: FormData) => {
-      console.log(data);
+   const onSubmit = async ({ prompt }: FormData) => {
       reset();
+
+      const { data } = await axios.post('/api/chat', {
+         prompt,
+         conversationId: conversationId.current,
+      });
+
+      console.log('Data:', data);
    };
 
-   const onKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+   const onKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
          e.preventDefault();
          submit(); // 'submit' returns a function named 'handleSubmit', so, we have to explicitly call that function.
