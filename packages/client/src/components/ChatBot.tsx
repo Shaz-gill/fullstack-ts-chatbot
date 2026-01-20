@@ -27,7 +27,8 @@ type Message = {
 export const ChatBot = () => {
    const [messages, setMessage] = useState<Message[]>([]);
    const [isBotTyping, setIsBotTyping] = useState(false);
-   const formRef = useRef<HTMLFormElement | null>(null);
+   const [error, setError] = useState('');
+   const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
    // We used 'ref hook' because 'conversationId' should be created once and should not change and re-render, that is the difference between the ref and state hooks.
    // With 'ref hook', we can store values that should not cause a re-render. It's good for timers, IDs.
@@ -35,36 +36,40 @@ export const ChatBot = () => {
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
 
    useEffect(() => {
-      formRef.current?.scrollIntoView({ behavior: 'smooth' });
+      lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
    }, [messages]);
 
    const onSubmit = async ({ prompt }: FormData) => {
-      setMessage((prev) => [
-         ...prev,
-         {
-            content: prompt,
-            role: 'user',
-         },
-      ]);
+      try {
+         setMessage((prev) => [
+            ...prev,
+            {
+               content: prompt,
+               role: 'user',
+            },
+         ]);
 
-      setIsBotTyping(true);
+         setError('');
 
-      reset();
+         reset({ prompt: '' });
 
-      const { data } = await axios.post<ChatResponse>('/api/chat', {
-         prompt,
-         conversationId: conversationId.current,
-      });
+         const { data } = await axios.post<ChatResponse>('/api/chat', {
+            prompt,
+            conversationId: conversationId.current,
+         });
 
-      setMessage((prev) => [
-         ...prev,
-         {
-            content: data.message,
-            role: 'bot',
-         },
-      ]);
-
-      setIsBotTyping(false);
+         setMessage((prev) => [
+            ...prev,
+            {
+               content: data.message,
+               role: 'bot',
+            },
+         ]);
+      } catch (error) {
+         setError('Something went wrong, try again!');
+      } finally {
+         setIsBotTyping(false);
+      }
    };
 
    const onKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
@@ -85,12 +90,13 @@ export const ChatBot = () => {
    };
 
    return (
-      <div>
-         <div className="flex flex-col gap-3 mb-10">
+      <div className="flex flex-col h-full">
+         <div className="flex flex-col flex-1 gap-3 mb-10 overflow-y-auto">
             {messages.map((message, index) => (
                <div
                   key={index}
                   onCopy={onCopyMessage}
+                  ref={index === messages.length - 1 ? lastMessageRef : null}
                   className={`px-3 py-1 rounded-xl ${
                      message.role === 'user'
                         ? 'bg-blue-600 text-white self-end'
@@ -107,18 +113,19 @@ export const ChatBot = () => {
                   <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse delay-300"></div>
                </div>
             )}
+            {error && <p className="text-red-500">{error}</p>}
          </div>
          <form
             onSubmit={submit} // returns a function
             onKeyDown={onKeyDown}
             className="flex flex-col gap-2 items-end border-2 p-4 rounded-3xl"
-            ref={formRef}
          >
             <textarea
                {...register('prompt', {
                   required: true,
                   validate: (data) => data.trim().length > 0,
                })}
+               autoFocus
                className="w-full border-0 focus:outline-0 resize-none"
                placeholder="Ask anything"
                maxLength={1000}
