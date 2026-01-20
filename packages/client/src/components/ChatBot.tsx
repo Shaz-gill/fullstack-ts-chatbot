@@ -1,9 +1,15 @@
 import axios from 'axios';
-import { useRef, useState, type KeyboardEvent } from 'react';
+import {
+   useEffect,
+   useRef,
+   useState,
+   type KeyboardEvent,
+   type ClipboardEvent,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowUp } from 'react-icons/fa';
-import { Button } from './ui/button';
 import ReactMarkdown from 'react-markdown';
+import { Button } from './ui/button';
 
 type FormData = {
    prompt: string;
@@ -20,11 +26,17 @@ type Message = {
 
 export const ChatBot = () => {
    const [messages, setMessage] = useState<Message[]>([]);
+   const [isBotTyping, setIsBotTyping] = useState(false);
+   const formRef = useRef<HTMLFormElement | null>(null);
 
    // We used 'ref hook' because 'conversationId' should be created once and should not change and re-render, that is the difference between the ref and state hooks.
    // With 'ref hook', we can store values that should not cause a re-render. It's good for timers, IDs.
    const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
+
+   useEffect(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
+   }, [messages]);
 
    const onSubmit = async ({ prompt }: FormData) => {
       setMessage((prev) => [
@@ -34,6 +46,8 @@ export const ChatBot = () => {
             role: 'user',
          },
       ]);
+
+      setIsBotTyping(true);
 
       reset();
 
@@ -49,6 +63,8 @@ export const ChatBot = () => {
             role: 'bot',
          },
       ]);
+
+      setIsBotTyping(false);
    };
 
    const onKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
@@ -60,12 +76,21 @@ export const ChatBot = () => {
 
    const submit = handleSubmit(onSubmit);
 
+   const onCopyMessage = (e: ClipboardEvent<HTMLParagraphElement>) => {
+      const selection = window.getSelection()?.toString().trim();
+      if (selection) {
+         e.preventDefault();
+         e.clipboardData.setData('text/plain', selection);
+      }
+   };
+
    return (
       <div>
          <div className="flex flex-col gap-3 mb-10">
             {messages.map((message, index) => (
-               <p
+               <div
                   key={index}
+                  onCopy={onCopyMessage}
                   className={`px-3 py-1 rounded-xl ${
                      message.role === 'user'
                         ? 'bg-blue-600 text-white self-end'
@@ -73,13 +98,21 @@ export const ChatBot = () => {
                   }`}
                >
                   <ReactMarkdown>{message.content}</ReactMarkdown>
-               </p>
+               </div>
             ))}
+            {isBotTyping && (
+               <div className="flex self-start gap-1 px-3 py-3 bg-gray-200 rounded-xl">
+                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse"></div>
+                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse delay-150"></div>
+                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse delay-300"></div>
+               </div>
+            )}
          </div>
          <form
             onSubmit={submit} // returns a function
             onKeyDown={onKeyDown}
             className="flex flex-col gap-2 items-end border-2 p-4 rounded-3xl"
+            ref={formRef}
          >
             <textarea
                {...register('prompt', {
