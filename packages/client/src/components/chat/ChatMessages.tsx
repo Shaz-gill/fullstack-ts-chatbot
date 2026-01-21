@@ -32,13 +32,23 @@ const ChatMessages = ({ messages }: Props) => {
                key={index}
                onCopy={onCopyMessage}
                ref={index === messages.length - 1 ? lastMessageRef : null}
-               className={`px-3 py-1 max-w-md rounded-xl ${
+               className={`px-3 py-1 max-w-2xl rounded-xl ${
                   message.role === 'user'
-                     ? 'bg-blue-600 text-white self-end'
-                     : 'bg-gray-100 text-black self-start'
+                     ? 'bg-blue-600 text-white self-end text-right'
+                     : 'bg-gray-100 text-black self-start text-left'
                }`}
             >
-               <ReactMarkdown>{message.content}</ReactMarkdown>
+               <article className="prose max-w-none">
+                  <ReactMarkdown
+                     components={{
+                        ul: ({ node, ...props }) => (
+                           <ul className="list-disc pl-5" {...props} />
+                        ),
+                     }}
+                  >
+                     {message.content}
+                  </ReactMarkdown>
+               </article>
             </div>
          ))}
       </div>
