@@ -95,18 +95,43 @@ OPENAI_API_KEY=your_openai_api_key_here
 ## 🛠️ Installation & Setup
 
 ```bash
+# Clone the repository from GitHub
 git clone https://github.com/Shaz-gill/fullstack-ts-chatbot.git
+
+# Move into the project root directory
 cd fullstack-ts-chatbot
 
+# Install root-level dependencies using Bun
+bun install
+
+# Navigate to the frontend (client) package
 cd packages/client
+
+# Install client-side dependencies
 bun install
 
+# Add Tailwind CSS and Vite plugin as development dependencies
+bun add -D tailwindcss @tailwindcss/vite
+
+# Navigate to the backend (server) package
 cd packages/server
+
+# Install server-side dependencies
 bun install
 
+# Return to the project root directory
 cd ../../
+
+# Start the development environment (client + server)
 bun run dev
 ```
+
+---
+
+## 🚀 Development URLs
+
+- Frontend (Client): http://localhost:5173/
+- Backend (Server): http://localhost:3000/
 
 ---
 
