@@ -3,13 +3,13 @@ import {
    useEffect,
    useRef,
    useState,
-   type KeyboardEvent,
    type ClipboardEvent,
+   type KeyboardEvent,
 } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowUp } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 
 type FormData = {
    prompt: string;
@@ -24,7 +24,7 @@ type Message = {
    role: 'user' | 'bot';
 };
 
-export const ChatBot = () => {
+const ChatBot = () => {
    const [messages, setMessage] = useState<Message[]>([]);
    const [isBotTyping, setIsBotTyping] = useState(false);
    const [error, setError] = useState('');
@@ -41,6 +41,7 @@ export const ChatBot = () => {
 
    const onSubmit = async ({ prompt }: FormData) => {
       try {
+         setIsBotTyping(true);
          setMessage((prev) => [
             ...prev,
             {
@@ -140,3 +141,5 @@ export const ChatBot = () => {
       </div>
    );
 };
+
+export default ChatBot;
