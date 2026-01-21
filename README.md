@@ -94,11 +94,18 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 ## 🛠️ Installation & Setup
 
-### 1️⃣ Clone the Repository
-
 ```bash
-git clone https://github.com/your-username/wonderworld-ai-chatbot.git
-cd wonderworld-ai-chatbot
+git clone https://github.com/Shaz-gill/fullstack-ts-chatbot.git
+cd fullstack-ts-chatbot
+
+cd packages/client
+bun install
+
+cd packages/server
+bun install
+
+cd ../../
+bun run dev
 ```
 
 ---
