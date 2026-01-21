@@ -38,17 +38,23 @@ const ChatMessages = ({ messages }: Props) => {
                      : 'bg-gray-100 text-black self-start text-left'
                }`}
             >
-               <article className="prose max-w-none">
-                  <ReactMarkdown
-                     components={{
-                        ul: ({ node, ...props }) => (
-                           <ul className="list-disc pl-5" {...props} />
-                        ),
-                     }}
-                  >
-                     {message.content}
-                  </ReactMarkdown>
-               </article>
+               <ReactMarkdown
+                  components={{
+                     ul: ({ node, ...props }) => (
+                        <ul className="list-disc pl-5" {...props} />
+                     ),
+                     a: ({ node, ...props }) => (
+                        <a
+                           className="text-blue-600 underline hover:text-blue-800"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           {...props}
+                        />
+                     ),
+                  }}
+               >
+                  {message.content}
+               </ReactMarkdown>
             </div>
          ))}
       </div>
