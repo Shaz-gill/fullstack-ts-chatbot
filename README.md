@@ -18,6 +18,8 @@
 
 Built with a modern **full-stack architecture**, the chatbot delivers fast performance, a polished UI, and intelligent responses powered by OpenAI.
 
+![WonderWorld Preview](assets/preview.png)
+
 ---
 
 ## 🤖 Features
