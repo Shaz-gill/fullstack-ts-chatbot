@@ -63,6 +63,11 @@ const ChatBot = () => {
    return (
       <div className="flex flex-col h-full">
          <div className="flex flex-col flex-1 gap-3 mb-10 overflow-y-auto">
+            {messages.length === 0 && !isBotTyping && !error && (
+               <p className="text-gray-600 text-center mt-40">
+                  🎠 Welcome to Theme Park Chat!
+               </p>
+            )}
             <ChatMessages messages={messages} />
             {isBotTyping && <TypingIndicator />}
             {error && <p className="text-red-500">{error}</p>}
