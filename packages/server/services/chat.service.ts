@@ -1,8 +1,8 @@
 import fs from 'fs';
-import path from 'path';
 import OpenAI from 'openai';
-import { conversationRepository } from '../repositories/conversation.respository';
+import path from 'path';
 import template from '../prompts/chatbot.txt';
+import { conversationRepository } from '../repositories/conversation.respository';
 
 // - Implementation Detail
 const client = new OpenAI({
