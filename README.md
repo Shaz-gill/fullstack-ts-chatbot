@@ -1,80 +1,68 @@
-# 🎢 WonderWorld AI Chatbot
+# WonderWorld AI Chatbot
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" />
-  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" />
-  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
-  <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
-  <img src="https://img.shields.io/badge/shadcn/ui-000000?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white" />
-  <img src="https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white" />
-</p>
+> An AI-powered conversational assistant built for a theme park experience.
+
+WonderWorld is a full-stack chatbot application that helps park visitors get instant answers about rides, attractions, tickets, food, events, and facilities — all through natural language conversation. The backend is powered by the OpenAI API with a custom prompt layer tuned specifically for theme park context, while the frontend delivers a polished, responsive chat interface.
 
 ---
 
-## ✨ Overview
+## Table of Contents
 
-**WonderWorld AI Chatbot** is an AI-powered conversational assistant designed for a theme park experience. It helps visitors with ride information, park rules, ticket guidance, timings, events, food options, and general inquiries using natural language.
-
-Built with a modern **full-stack architecture**, the chatbot delivers fast performance, a polished UI, and intelligent responses powered by OpenAI.
-
-![WonderWorld Preview](assets/preview.png)
-
----
-
-## 🤖 Features
-
-- 🎢 Theme park–specific AI chatbot (WonderWorld)
-- 🗺️ Ride details, timings & attractions info
-- 🎟️ Ticket & pricing guidance
-- 🍔 Food, events & facility queries
-- ⚡ Real-time AI responses using OpenAI API
-- 🎨 Modern UI with shadcn/ui & Tailwind CSS
-- 🔐 Secure environment variable handling
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Development URLs](#development-urls)
+- [License](#license)
 
 ---
 
-## 🧱 Tech Stack
+## Features
 
-### Frontend
-
-- **React**
-- **Tailwind CSS**
-- **shadcn/ui**
-
-### Backend
-
-- **Node.js**
-- **Express.js**
-- **OpenAI API**
-
-### Tooling
-
-- **Bun** (runtime & package manager)
+- **Domain-specific AI** — Custom system prompt tailored to WonderWorld's rides, timings, ticketing, and facilities, keeping responses relevant and on-brand.
+- **Real-time responses** — Streamed replies from the OpenAI API for a fast, natural chat experience.
+- **Ride & attraction info** — Visitors can ask about wait times, height requirements, and ride descriptions.
+- **Ticket & pricing guidance** — Handles common questions about admission, passes, and group bookings.
+- **Food, events & facilities** — Answers queries about dining options, scheduled events, and park amenities.
+- **Secure key management** — API credentials are handled server-side only and never exposed to the client.
+- **Monorepo architecture** — Clean separation between client and server packages with shared tooling.
 
 ---
 
-## 📂 Project Structure
+## Tech Stack
 
-```bash
+| Layer    | Technology        | Role                            |
+| -------- | ----------------- | ------------------------------- |
+| Frontend | React             | UI component framework          |
+| Frontend | Tailwind CSS      | Utility-first styling           |
+| Frontend | shadcn/ui         | Accessible UI component library |
+| Backend  | Node.js + Express | REST API server                 |
+| Backend  | OpenAI API        | Language model inference        |
+| Tooling  | Bun               | Runtime and package manager     |
+
+---
+
+## Project Structure
+
+```
 root/
 ├── packages/
-│   ├── client/
+│   ├── client/                 # React frontend
 │   │   ├── src/
-│   │   │   ├── components/
-│   │   │   └── App.tsx
+│   │   │   ├── components/     # Reusable UI components
+│   │   │   ├── App.tsx
 │   │   │   └── main.tsx
 │   │   └── package.json
 │   │
-│   └── server/
+│   └── server/                 # Express backend
 │       ├── src/
-│       │   ├── controllers/
-│       │   ├── prompts/
-│       │   ├── repositories/
-│       │   └── services
+│       │   ├── controllers/    # Request handlers
+│       │   ├── prompts/        # System prompt definitions
+│       │   ├── repositories/   # Data access layer
+│       │   └── services/       # Business logic
 │       ├── routes.ts
 │       ├── index.ts
-│       ├── .env
 │       └── package.json
 │
 └── README.md
@@ -82,76 +70,70 @@ root/
 
 ---
 
-## 🔐 Environment Variables
+## Getting Started
 
-Create a `.env` file inside the **packages/server** directory:
+### Prerequisites
+
+- [Bun](https://bun.sh/) v1.0 or higher
+- An [OpenAI API key](https://platform.openai.com/api-keys)
+
+### Installation
+
+Clone the repository and install all dependencies:
+
+```sh
+git clone https://github.com/Shaz-gill/fullstack-ts-chatbot.git
+cd fullstack-ts-chatbot
+
+# Install root dependencies
+bun install
+
+# Install client dependencies
+cd packages/client
+bun install
+bun add -D tailwindcss @tailwindcss/vite
+
+# Install server dependencies
+cd ../server
+bun install
+
+# Return to project root
+cd ../../
+```
+
+### Running the App
+
+Before starting, make sure you have configured your environment variables (see below).
+
+```sh
+bun run dev
+```
+
+This starts both the client and server concurrently in development mode.
+
+---
+
+## Environment Variables
+
+Create a `.env` file inside `packages/server/` with the following:
 
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-> ⚠️ Never commit `.env` files to version control.
+> Never commit `.env` files to version control. The `.gitignore` should exclude them by default.
 
 ---
 
-## 🛠️ Installation & Setup
+## Development URLs
 
-```bash
-# Clone the repository from GitHub
-git clone https://github.com/Shaz-gill/fullstack-ts-chatbot.git
-
-# Move into the project root directory
-cd fullstack-ts-chatbot
-
-# Install root-level dependencies using Bun
-bun install
-
-# Navigate to the frontend (client) package
-cd packages/client
-
-# Install client-side dependencies
-bun install
-
-# Add Tailwind CSS and Vite plugin as development dependencies
-bun add -D tailwindcss @tailwindcss/vite
-
-# Navigate to the backend (server) package
-cd packages/server
-
-# Install server-side dependencies
-bun install
-
-# Return to the project root directory
-cd ../../
-
-# Start the development environment (client + server)
-bun run dev
-```
+| Service  | URL                   |
+| -------- | --------------------- |
+| Frontend | http://localhost:5173 |
+| Backend  | http://localhost:3000 |
 
 ---
 
-## 🚀 Development URLs
+## License
 
-- Frontend (Client): http://localhost:5173/
-- Backend (Server): http://localhost:3000/
-
----
-
-## 🧪 Best Practices
-
-- 🔒 Secure API key management
-- 🧩 Clean separation of frontend & backend
-- ♻️ Reusable UI components
-- ⚡ High-performance runtime with Bun
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License**.
-
----
-
-## ⭐ Support
-
-If you like **WonderWorld AI Chatbot**, consider giving it a ⭐ on GitHub!
+This project is licensed under the [MIT License](LICENSE).
