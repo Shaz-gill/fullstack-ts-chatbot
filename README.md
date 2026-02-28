@@ -4,6 +4,8 @@
 
 WonderWorld is a full-stack chatbot application that helps park visitors get instant answers about rides, attractions, tickets, food, events, and facilities — all through natural language conversation. The backend is powered by the OpenAI API with a custom prompt layer tuned specifically for theme park context, while the frontend delivers a polished, responsive chat interface.
 
+![Game Verse Preview](assets/preview.png)
+
 ---
 
 ## Table of Contents
